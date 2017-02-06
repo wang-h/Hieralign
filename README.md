@@ -50,19 +50,19 @@ There are 3 ways to use `Hieralign`:
 
  `Hieralign` generates symmetric alignments (source–target, i.e., left language–right language) alignments is:
  
-    ./Hieralign --train train.txt --model ibm1_vbh > aligned.hier
+   ` ./Hieralign --train train.txt --model ibm1_vbh > aligned.hier`
 
  2. train the model in advance:
 
  The usually and recommended way to train and store a model is to just add the `--model_file` option:
 
-    ./Hieralign --train train.txt --model ibm1 --model_file path_to_store_model 
+   ` ./Hieralign --train train.txt --model ibm1 --model_file path_to_store_model` 
     
  3. as an online aligner:
 
  Given the trained model, `Hieralign` can be ran as an online aligner:
  
-   ./Hieralign --input test.txt --model ibm1 --model_file path_to_store_model > aligned.hier
+   `./Hieralign --input test.txt --model ibm1 --model_file path_to_store_model > aligned.hier`
 
 ## Output
 
