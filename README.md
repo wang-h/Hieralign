@@ -1,4 +1,5 @@
-Hieralign- Word Alignment using Hierarchial Sub-sentential Alignment method with various IBM1 models
+Hieralign 
+Word Alignment using Hierarchial Sub-sentential Alignment method with various IBM1 models
 ==========
 
 `Hieralign` is yet another word alignment tool simple, fast and unsupervised, it has been implemented with 
