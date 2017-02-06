@@ -46,21 +46,21 @@ To compile, do the following
 Run `Hieralign` to see a list of command line options.
 There are 3 ways to use `Hieralign`: 
 
-1. as a normal word aligner:
+ 1. as a normal word aligner:
 
-`Hieralign` generates symmetric alignments (source–target, i.e., left language–right language) alignments is:
+ `Hieralign` generates symmetric alignments (source–target, i.e., left language–right language) alignments is:
  
     ./Hieralign --train train.txt --model ibm1_vbh > aligned.hier
 
-2. train the model in advance:
+ 2. train the model in advance:
 
-The usually and recommended way to train and store a model is to just add the `--model_file` option:
+ The usually and recommended way to train and store a model is to just add the `--model_file` option:
 
     ./Hieralign --train train.txt --model ibm1 --model_file path_to_store_model
 
 3. as an online aligner:
 
-Given the trained model, `Hieralign` can be ran as an online aligner:
+ Given the trained model, `Hieralign` can be ran as an online aligner:
 
    ./Hieralign --input test.txt --model ibm1 --model_file path_to_store_model > aligned.hier
 
