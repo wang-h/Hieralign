@@ -56,12 +56,12 @@ There are 3 ways to use `Hieralign`:
 
  The usually and recommended way to train and store a model is to just add the `--model_file` option:
 
-    ./Hieralign --train train.txt --model ibm1 --model_file path_to_store_model
-
-3. as an online aligner:
+    ./Hieralign --train train.txt --model ibm1 --model_file path_to_store_model 
+    
+ 3. as an online aligner:
 
  Given the trained model, `Hieralign` can be ran as an online aligner:
-
+ 
    ./Hieralign --input test.txt --model ibm1 --model_file path_to_store_model > aligned.hier
 
 ## Output
