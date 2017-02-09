@@ -8,73 +8,22 @@ Hieralign::~Hieralign()
 {
 }
 
-void Hieralign::setHyperParameters(const double theta, const double delta, const double threshold){
+void Hieralign::setHyperParameters(const double& theta, const double& delta, const double& p0){
 	sigma_theta = theta;
 	sigma_delta = delta;
-	sigma_threshold = threshold;
-	cerr<<"Parameters:     \t[theta: "<<sigma_theta<<", delta: "<<sigma_delta<<", threshold: "<<sigma_threshold << "]"<<endl;
+	sigma_p0 = p0;
+	cerr<<"Parameters:     \t[theta: "<<sigma_theta<<", delta: "<<sigma_delta<<", p0: "<<sigma_p0 << "]"<<endl;
 }
 void Hieralign::LoadTranslationTable(const TranslationTable &other){ 
 	ttable = other; 
 }
 
-void Hieralign::LoadTranslationTableWithBatches(ifstream *file, const SimpleWordWrapper &sw2id, const SimpleWordWrapper &tw2id){ 
-	vector<vector<pair<unsigned, double>>> insert_buffer;  
-	int i;
-	string line;
-	double insert_buffer_items=0.0;  
-	for(i=0;!getline(*file, line).eof();i++)
-	{ 
-		const vector<string> tokens = Split(line, " ");
-		CHECK(tokens.size() == 3, "#ERROR! model format wrong: " + line);
-		const string& f = tokens[0];
-		const string& e = tokens[1];
-		const unsigned & f_idx = sw2id.contain(f);
-		const unsigned & e_idx = tw2id.contain(e);
-		if (f_idx && e_idx){   
-			if (f_idx >= insert_buffer.size()) {
-				insert_buffer.resize(f_idx+1);
-			} 
-			insert_buffer[f_idx].push_back(make_pair(e_idx, stod(tokens[2])));
-			insert_buffer_items ++;
-		}
-		if (i % 100000 == 0 && i!=0){
-			cerr << '.';  
-		}
-		if (i % 1000000 == 0 && i!=0) { 
-			cerr << " [" << i << "]\n" << flush;  
-		} 
-		
-		if (insert_buffer_items >= thread_buffer_size*300) { 
-			AddTranslationOptionsInBatch(insert_buffer); 
-			insert_buffer.clear();
-			insert_buffer_items=0.0;
-		} 
-	}
-	AddTranslationOptionsInBatch(insert_buffer); 
-	insert_buffer.clear();
-	insert_buffer_items=0.0;
-	cerr << "Total:      \t[" << i << "]\n" << flush;   
-}
-inline void Hieralign::AddTranslationOptionsInBatch(vector<vector<pair<unsigned, double>>>& insert_buffer) {
-	ttable.SetMaxF_tt(insert_buffer.size()+1);
-	//#pragma omp parallel for schedule(dynamic) 
-	for (unsigned f = 0; f < insert_buffer.size(); f++) 
-	{ 
-		for(auto const& entry: insert_buffer[f]) 
-		{    
-			ttable.SetValue(f, entry.first, entry.second);
-		}
-		insert_buffer[f].clear(); 
-	}
-} 
- 
 void Hieralign::Align(ParallelCorpus &parallelCorpus){ 
 	AlignmentList link_list(parallelCorpus.size());
-	size_t i; 
+	 
 	int count=0;
-	#pragma omp parallel for schedule(dynamic) reduction(+:count)
-	for(i = 0; i < parallelCorpus.size(); i++){   
+	#pragma omp parallel for schedule(dynamic) reduction(+:count) 
+	for(size_t i = 0; i < parallelCorpus.size(); i++){   
 		if (i % 10000 == 0 && i!=0){
 			cerr << '.';  
 		}
@@ -83,16 +32,16 @@ void Hieralign::Align(ParallelCorpus &parallelCorpus){
 		} 
 		Alignment links; 
 		SentencePair sentence_pair = parallelCorpus[i];  
-		const int m = static_cast<int>(sentence_pair.first->size());
-		const int n = static_cast<int>(sentence_pair.second->size()); 
+		const unsigned m = static_cast<int>(sentence_pair.first->size());
+		const unsigned n = static_cast<int>(sentence_pair.second->size());  
 		if (m==1 || n== 1){
-			for (int i=0; i<m; i++)
-				for(int j=0; j<n; j++)
+			for (unsigned i=0; i<m; i++)
+				for(unsigned j=0; j<n; j++)
 					links.emplace_back(i, j); 
 		}
 		else{
 			Matrix softMatrix(m, n); 
-			BuildSoftAlignmentMatrix(sentence_pair, &softMatrix);
+			BuildSoftAlignmentMatrix(sentence_pair, m, n, &softMatrix);
 			//softMatrix.PrintMatrix();
 			Matrix accumMatrix(m+1, n+1);
 			BuildAccumMatrix(softMatrix, &accumMatrix); 
@@ -109,7 +58,7 @@ void Hieralign::Align(ParallelCorpus &parallelCorpus){
 }
 
 
-void Hieralign::ActionToAlignment(const vector<ParserAction> &bestActions, const int m, const int n,  Alignment *links){ 
+void Hieralign::ActionToAlignment(const vector<ParserAction> &bestActions, const unsigned& m, const unsigned& n,  Alignment *links){ 
 	vector<ParserBlock> stack;  
 	stack.emplace_back(0, 0, m, n);
 	for(size_t k = 0; k < bestActions.size(); k++){ 
@@ -121,28 +70,28 @@ void Hieralign::ActionToAlignment(const vector<ParserAction> &bestActions, const
 			if (action.x - block.i1 >= 2 && block.j2-action.y >= 2) 
 				stack.emplace_back(block.i1, action.y, action.x, block.j2); 
 			else if (action.x - block.i1 == 1 || block.j2-action.y == 1) 
-				for (int i=block.i1; i<action.x; i++)
-					for(int j=action.y; j<block.j2; j++)
+				for (unsigned i=block.i1; i<action.x; i++)
+					for(unsigned j=action.y; j<block.j2; j++)
 						(*links).emplace_back(i, j);
 			if (block.i2 - action.x >= 2 && action.y-block.j1 >= 2)
 				stack.emplace_back(action.x, block.j1, block.i2, action.y);
 			else if (block.i2 - action.x == 1 || action.y-block.j1 == 1) 
-				for (int i=action.x; i<block.i2; i++)
-					for(int j=block.j1; j<action.y; j++)
+				for (unsigned i=action.x; i<block.i2; i++)
+					for(unsigned j=block.j1; j<action.y; j++)
 						(*links).emplace_back(i, j); 
 		}
 		else{
 			if (action.x-block.i1 >= 2 && action.y-block.j1 >= 2)  
 				stack.emplace_back(block.i1, block.j1, action.x, action.y);
 			else if (action.x-block.i1 == 1 || action.y-block.j1 == 1) 
-				for (int i=block.i1; i<action.x; i++)
-					for(int j=block.j1; j<action.y; j++)
+				for (unsigned i=block.i1; i<action.x; i++)
+					for(unsigned j=block.j1; j<action.y; j++)
 						(*links).emplace_back(i, j);
 			if (block.i2- action.x >= 2 && block.j2-action.y >= 2)
 				stack.emplace_back(action.x, action.y, block.i2, block.j2);
 			else if (block.i2- action.x == 1 || block.j2-action.y == 1) 
-				for (int i=action.x; i<block.i2; i++)
-					for(int j=action.y; j<block.j2; j++)
+				for (unsigned i=action.x; i<block.i2; i++)
+					for(unsigned j=action.y; j<block.j2; j++)
 						(*links).emplace_back(i, j);  
 		} 
 	}
@@ -160,26 +109,25 @@ void Hieralign::PrintAlignmentList(const AlignmentList &linksList){
 	}
 }
 
-void Hieralign::BuildSoftAlignmentMatrix(const SentencePair &sentence_pair, Matrix *softMatrix){
-	const int m = sentence_pair.first->size();
-	const int n = sentence_pair.second->size();
+void Hieralign::BuildSoftAlignmentMatrix(const SentencePair &sentence_pair, const unsigned& m, const unsigned& n, Matrix *softMatrix){
+
 	const Sentence *src=sentence_pair.first;
 	const Sentence *trg=sentence_pair.second; 
 	#pragma omp parallel for schedule(dynamic) 
-	for(int i = 0; i < m; i++){  
-		for(int j = 0; j < n; j++){
-			const int sw = (*src)[i];
-			const int tw = (*trg)[j];   
-			const double theta = log(max(ttable.safe_prob(sw, tw), sigma_threshold))/sigma_theta;
+	for(unsigned i = 0; i < m; i++){  
+		for(unsigned j = 0; j < n; j++){ 
+			const unsigned sw = (*src)[i];
+			const unsigned tw = (*trg)[j];  
+			const double theta = log(max(ttable.safe_Prob(sw, tw), sigma_p0))/sigma_theta;
 			double score; 
 			if (sigma_delta < 0.001){
-				score = (1.0-sigma_threshold)*exp(theta);
+				score = (1.0-sigma_p0)*exp(theta);
 			}
 			else
 			{	
 				const double offset = abs(static_cast<double>(i)/m-static_cast<double>(j)/n); 
-				const double delta  = log(max(1.0-offset, sigma_threshold))/sigma_delta;  
-				score = (1.0-sigma_threshold)*exp(theta+delta);
+				const double delta  = log(max(1.0-offset, sigma_p0))/sigma_delta;  
+				score = (1.0-sqrt(sigma_p0))*exp(theta+delta);
 			} 
 			(*softMatrix)(i,j) = score; 
 		}
@@ -195,16 +143,16 @@ void Hieralign::BuildAccumMatrix(const Matrix &softMatrix, Matrix *accumMatrix){
 	}
 }
  
-void Hieralign::Parse(const Matrix &accumMatrix, const int ls, const int lt, 
+void Hieralign::Parse(const Matrix &accumMatrix, const unsigned& m, const unsigned& n, 
 								vector<ParserAction> *bestActions){
 	//const int maxblocksize = 3;
 	Agenda old_agenda;
 	Agenda new_agenda;
 	//top is the smallest
 	// Add the initial parser state to the agenda.
-	old_agenda.push(ParserState(ls, lt));
+	old_agenda.push(ParserState(m, n));
 	double current_score = DBL_MAX;
-	for (int transition = 0; transition < min(ls, lt); transition++) { 
+	for (unsigned transition = 0; transition < min(m, n); transition++) { 
 		if (old_agenda.empty())
 			continue;
 		while (!old_agenda.empty()) {
@@ -219,12 +167,11 @@ void Hieralign::Parse(const Matrix &accumMatrix, const int ls, const int lt,
 				continue;
 			}
 			const ParserBlock &block = state.stack.back();
-			BestParserActions bestParserActions;
-			SearchBestPartition(accumMatrix, block.i1, block.j1, block.i2, block.j2, &bestParserActions);
+			BestParserActions bestParserActions; 
+			SearchBestPartition(accumMatrix, &bestParserActions, block.i1, block.j1, block.i2, block.j2);
 			int top=0;
 			while (!bestParserActions.empty()&& top++ < 3 ) {
-				const ParserAction &action = bestParserActions.top(); 
-				//new_agenda.push(state, action);
+				const ParserAction &action = bestParserActions.top();  
 				ParserState new_state = ParserState(state);
 				new_state.Advance(action);
 				const double threshold =  new_agenda.empty() ? DBL_MAX : new_agenda.top().score;
@@ -250,10 +197,12 @@ void Hieralign::Parse(const Matrix &accumMatrix, const int ls, const int lt,
 	}
 	// Incremental top-down parsing with beam search. 
 }
-void Hieralign::SearchBestPartition(const Matrix &accumMatrix, const int i1,  const int j1, 
-										const int i2,  const int j2, BestParserActions *bestParserActions){
-	for (int i=i1+1; i<i2; i++){
-		for(int j=j1+1; j<j2; j++){
+void Hieralign::SearchBestPartition(const Matrix &accumMatrix, BestParserActions *bestParserActions,
+				const unsigned& i1,  const unsigned&  j1, const unsigned&  i2,  const unsigned&  j2 ){
+	
+	
+	for (unsigned i=i1+1; i<i2; i++){
+		for(unsigned j=j1+1; j<j2; j++){
 			double score, score_;
 //			const int x = i-i1;
 //			const int y = i2-i;
@@ -270,7 +219,8 @@ void Hieralign::SearchBestPartition(const Matrix &accumMatrix, const int i1,  co
 		}
 	}  
 }
-void Hieralign::FmeasureXY(const Matrix &accumMatrix, const int i1, const int j1, const int i2, const int j2, const int i3, const int j3,
+void Hieralign::FmeasureXY(const Matrix &accumMatrix, const unsigned& i1, const unsigned& j1, 
+						const unsigned& i2, const unsigned& j2, const unsigned& i3, const unsigned& j3,
 							double *score, double *score_){
 	const double Pi1j1 = accumMatrix(i1,j1);  
 	const double Pi1j2 = accumMatrix(i1,j2);  
@@ -293,7 +243,8 @@ void Hieralign::FmeasureXY(const Matrix &accumMatrix, const int i1, const int j1
 //	*score  = 2- WAB /(WAB + W_ABA_B) + W_A_B/(W_A_B + W_ABA_B);
 //	*score_ = 2- W_AB/(W_AB + W_A_BAB) + WA_B/(WA_B +  W_A_BAB);
 }
-void Hieralign::Ncut(const Matrix &accumMatrix, const int i1, const int j1, const int i2, const int j2, const int i3, const int j3,
+void Hieralign::Ncut(const Matrix &accumMatrix, const unsigned& i1, const unsigned& j1, 
+						const unsigned& i2, const unsigned& j2, const unsigned& i3, const unsigned& j3,
 							double *score, double *score_){
 	const double Pi1j1 = accumMatrix(i1,j1);  
 	const double Pi1j2 = accumMatrix(i1,j2);  

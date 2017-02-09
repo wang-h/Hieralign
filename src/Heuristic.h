@@ -9,7 +9,7 @@ inline bool AddVerticalNeighbors(const unsigned& i, const unsigned& j, const uns
 	for(auto &p :offset){
 		const unsigned x = i + p;
 		if ((1< i)&&(i<m-1) && F_aligned->find(x)==F_aligned->end() && (*matrix)(x, j)==1){
-			sure->push_back(make_pair(j+1, x+1));
+			sure->push_back(make_pair(j, x));
 			(*matrix)(x, j)++;
 			F_aligned->insert(x);
 			added = true;
@@ -23,7 +23,7 @@ inline bool AddHorizontalNeighbors(const unsigned& i, const unsigned& j, const u
 	for(auto &p :offset){
 		const unsigned y = j + p;
 		if ((1< j)&&(j<n-1) && E_aligned->find(y)==E_aligned->end()&& (*matrix)(i,y)==1){
-			sure->push_back(make_pair(y+1, i+1));
+			sure->push_back(make_pair(y, i));
 			(*matrix)(i, y)++;
 			E_aligned->insert(y); 
 			added = true;
@@ -41,7 +41,7 @@ inline bool AddDiagonalNeighbors(const unsigned& i, const unsigned& j, const uns
 			if ((1< j) && (j<n-1) && (1< i) && (i<m-1)){ 
 				if (F_aligned->find(i)== F_aligned->end()||E_aligned->find(j)== E_aligned->end()){
 					if ( (*matrix)(x,y)==1){
-						sure->push_back(make_pair(y+1, x+1));
+						sure->push_back(make_pair(y, x));
 						(*matrix)(x,y) ++;
 						F_aligned->insert(x);
 						E_aligned->insert(y); 
@@ -61,7 +61,7 @@ inline void AddFinalAndNeighbors(const unsigned& m, const unsigned& n, Matrix *m
 			if (F_aligned->find(i)== F_aligned->end() 
 					&& E_aligned->find(j)== E_aligned->end()){ 
 				if ((*matrix)(i, j)==1){
-					sure->push_back(make_pair(j+1, i+1));
+					sure->push_back(make_pair(j, i));
 					F_aligned->insert(i);
 					F_aligned->insert(j); 
 				}
@@ -105,19 +105,18 @@ void SymmetrizeAlignment(const AlignmentList &forward_list, const AlignmentList 
 		Matrix align_matrix(m, n);   
 		Alignment sure;
 		set<unsigned> F_aligned, E_aligned; 
-		for (auto & it : forward_links){ 
-			if (it.second){
-				const unsigned int y= it.first -1;
-				const unsigned int x= it.second-1;
-				align_matrix(x, y) = 1;
-			}
+		for (auto & it : forward_links){  
+			const unsigned int y= it.first;
+			const unsigned int x= it.second;
+			if(x<m)
+				align_matrix(x, y) = 1; 
 		}
-		for (auto & it :  backward_links){
-			if (it.second){
-				const unsigned int x= it.first -1;
-				const unsigned int y= it.second-1;
+		for (auto & it :  backward_links){ 
+			const unsigned int x= it.first;
+			const unsigned int y= it.second;
+			if(y<n){
 				if (align_matrix(x, y)>0){ 
-					sure.push_back(make_pair(it.second, it.first));
+					sure.push_back(make_pair(y, x));
 					F_aligned.insert(x);
 					E_aligned.insert(y);
 				}

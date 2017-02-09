@@ -11,12 +11,10 @@ class ParallelCorpus
 		SentenceList sourceSentences; 
 		SentenceList targetSentences;
 		
-		inline const Sentence EncodeSentenceWithWrapper(const string& line, SimpleWordWrapper* w2id, const bool& addNull){ 
+		inline const Sentence EncodeSentenceWithWrapper(const string& line, SimpleWordWrapper* w2id){ 
 			Sentence sentence; 
 			const vector<string> tokens = Split(line, " "); 
-			CHECK( tokens.size() >0, "Invalid line: " + line);
-			if(addNull)
-				sentence.push_back(w2id->encode("NULL")); 
+			CHECK( tokens.size() >0, "Invalid line: " + line); 
 			for(size_t j = 0; j < tokens.size(); j++)
 				sentence.push_back(w2id->encode(tokens[j]));
 			return sentence;
@@ -25,22 +23,22 @@ class ParallelCorpus
 		ParallelCorpus(){}; 
 		~ParallelCorpus(){}; 
 		size_t size_ = 0; 
-		void ReadParallelCorpus(ifstream *file, SimpleWordWrapper *sw2id, SimpleWordWrapper *tw2id, bool addNull=false){
+		void ReadParallelCorpus(ifstream *file, SimpleWordWrapper *sw2id, SimpleWordWrapper *tw2id){
 			for(string line;!getline(*file, line).eof();){ 
 				const vector<string> sentence_pair = Split(line, "\t");
 				CHECK(sentence_pair.size() == 2, "#ERROR! invalid line: " + line); 
-				sourceSentences.push_back(EncodeSentenceWithWrapper(sentence_pair[0], sw2id, addNull)); 
-				targetSentences.push_back(EncodeSentenceWithWrapper(sentence_pair[1], tw2id, addNull)); 
+				sourceSentences.push_back(EncodeSentenceWithWrapper(sentence_pair[0], sw2id)); 
+				targetSentences.push_back(EncodeSentenceWithWrapper(sentence_pair[1], tw2id)); 
 			}
 			CHECK(source_size() == target_size(), "#ERROR! sentences are not equal.");
 			size_ = source_size(); 
 			//cerr << "training corpus size:"  << " [" << size_ << "]" << endl;
 		};
-		void ReadCorpus(ifstream *file, SimpleWordWrapper *sw2id, SimpleWordWrapper *tw2id, bool isSource=true, bool addNull=false){ 
+		void ReadCorpus(ifstream *file, SimpleWordWrapper *sw2id, SimpleWordWrapper *tw2id, bool isSource=true){ 
 			SentenceList *sentences = (isSource)? &sourceSentences:&targetSentences;
 			SimpleWordWrapper* w2id = (isSource)? sw2id:tw2id;
 			for(string line;!getline(*file, line).eof();){  
-				sentences->push_back(EncodeSentenceWithWrapper(line, w2id, addNull));
+				sentences->push_back(EncodeSentenceWithWrapper(line, w2id));
 			}
 			if(!isSource){
 				CHECK(source_size() == target_size(), "#ERROR! sentences are not equal."); 

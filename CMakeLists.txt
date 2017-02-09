@@ -36,8 +36,8 @@ include_directories(
 add_definitions(-W)
 add_definitions(-fopenmp)
 add_definitions(-std=c++11) 
+add_definitions(-Wall)
 add_definitions(-O3)
-add_definitions(-O2)
 add_definitions(
     -DNDEBUG
 )

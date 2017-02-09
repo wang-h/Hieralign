@@ -45,7 +45,7 @@ class Matrix
 		void PrintMatrix() {
 			for(size_t i = 0; i < width_; i++){ 
 				for(size_t j = 0; j < height_; j++){
-					printf("%.5f ", data_[offset(i, j)]);
+					printf("%.4f ", data_[offset(i, j)]);
 				}
 				printf("\n");
 			}

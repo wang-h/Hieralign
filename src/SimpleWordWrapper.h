@@ -1,20 +1,20 @@
- #ifndef SIMPLEWORDWRAPPER_H
+#ifndef SIMPLEWORDWRAPPER_H
 #define SIMPLEWORDWRAPPER_H 
 #include "Utils.h"
 class SimpleWordWrapper{
 	public: 
-		SimpleWordWrapper() : b0("<bad0>") {
+		SimpleWordWrapper() : unk_("<UNK>"){
 			words.reserve(20000);
+			encode("NULL");// dict["NULL "] = 1; 
 		};
 		~SimpleWordWrapper(){};
 		typedef unordered_map<string, unsigned, hash<string> > HASH_MAP_TYPE; 
 		inline unsigned max() const { return words.size(); } 
-		inline unsigned encode(const string& word, bool frozen = false) { 
+		inline unsigned encode(const string& word) { 
 			HASH_MAP_TYPE::iterator i = dict.find(word);
 			if (i == dict.end()) {
-				// dict["NULL "] = 1; 
 				if (frozen)
-					return 0;
+					return 0;//for unknown word
 				words.push_back(word);
 				dict[word] = words.size();
 				return words.size();
@@ -23,20 +23,19 @@ class SimpleWordWrapper{
 				return i->second; 
 		} 
 		inline const string& decode(const unsigned id) const {
-			if (id == 0) return b0;
+			if (id == 0) return unk_;
 			return words[id-1];
 		}
 		size_t size()const{
 			return words.size();
 		} 
-		inline unsigned contain(const string& word) const{ 
-			HASH_MAP_TYPE::const_iterator i = dict.find(word);
-			if (i == dict.end()) 
-				return 0;  
-			return i->second; 
-		} 
+		void Frozen(){
+			frozen=true;
+		}
 	private:
-		string b0;
+		string unk_;
+		bool add_null_;
+		bool frozen=false;
 		vector<string> words;
 		HASH_MAP_TYPE dict;
 		HASH_MAP_TYPE dict_;

@@ -21,15 +21,15 @@
 
 class Hieralign 
 {
-private:
-		int beam_width = 10;  
-		
+	private:
+		unsigned beam_width = 10;  
+		double sigma_p0      = 1e-6;
 		struct ParserAction{
-			int x;
-			int y;
+			unsigned x;
+			unsigned y;
 			bool option; 
 			double score;
-			ParserAction(int x_, int y_, bool option_, double score_=0.0) : x(x_), y(y_), option(option_), score(score_){};
+			ParserAction(unsigned x_, unsigned y_, bool option_, double score_=0.0) : x(x_), y(y_), option(option_), score(score_){};
 			bool operator==(const ParserAction& rhs) const {
 				return  (x == rhs.x  && y == rhs.y && option == rhs.option) ; 
 			} 
@@ -41,16 +41,16 @@ private:
 			unsigned x;
 			unsigned y;
 			double score;
-			TranslationEntry(int x_, int y_, double score_) : x(x_), y(y_), score(score_){};
+			TranslationEntry(unsigned x_, unsigned y_, double score_) : x(x_), y(y_), score(score_){};
 		};
 		struct ParserBlock{
-			int i1;
-			int j1;
-			int i2;
-			int j2; 
+			unsigned i1;
+			unsigned j1;
+			unsigned i2;
+			unsigned j2; 
 			//type {0, 1}
 			//0: terminal, 1: nonterminal
-			ParserBlock(int i1_, int j1_, int i2_, int j2_): i1(i1_), j1(j1_), i2(i2_), j2(j2_){}
+			ParserBlock(unsigned i1_, unsigned j1_, unsigned i2_, unsigned j2_): i1(i1_), j1(j1_), i2(i2_), j2(j2_){}
 			bool operator==(const ParserBlock &rhs) const {
 				return (rhs.i1 == i1 && rhs.j1 == j1 && rhs.i2 == i2 && rhs.j2 == j2);
 			}
@@ -62,18 +62,14 @@ private:
 				bool   terminal;
 				vector<ParserBlock> stack;  // Stack of open blocks.
 				vector<ParserAction> actions;  // History of actions. 
-				explicit ParserState(int ls, int lt): score(0.0), terminal(false) {
-					if (ls > 1 && lt> 1) {
-						stack.emplace_back(0, 0, ls, lt);
-					} 
-				} 
-//				ParserState(const ParserState &state, const ParserAction &action)
-//					: score(state.score), stack(state.stack), actions(state.actions), terminal(false){
-//					Advance(action,  );
-//				} 
+				explicit ParserState(unsigned m, unsigned n): score(0.0), terminal(false) {
+					if (m > 1 && n> 1) {
+						stack.emplace_back(0, 0, m, n);
+					}  
+				}  
 				ParserState(const ParserState &state)
-					: score(state.score), stack(state.stack), actions(state.actions), terminal(state.terminal){ 
-				} 
+					: score(state.score), terminal(state.terminal), stack(state.stack), actions(state.actions){ 
+				}  
 				void Advance(const ParserAction &action){
 					//score *=  action.score;
 					//score *= action.score;
@@ -81,61 +77,21 @@ private:
 					const ParserBlock block = stack.back();
 					stack.pop_back();
 					
-					const int i = action.x;
-					const int j = action.y;
+					const unsigned i = action.x;
+					const unsigned j = action.y;
 					const bool option = action.option;
 					if (option){
-						//inverted
+						//inverted option=true
 						if (i - block.i1 >= 2 && block.j2-j >= 2) 
-							stack.emplace_back(block.i1, j, i, block.j2);
-//						else if (i - block.i1 == 1 || block.j2-j == 1){
-//							double max_ = DBL_MIN;
-//							for(int p=block.i1; p<i; p++)
-//								for(int q=j; q<block.j2; q++){
-//									const double score_ =softMatrix[p][q]; 
-//									if (max_ < score_)
-//										max_=score_;
-//							}
-//							score += log(max_); 
-//						} 
+							stack.emplace_back(block.i1, j, i, block.j2); 
 						if (block.i2 - i >= 2 && j-block.j1 >= 2)
-							stack.emplace_back(i, block.j1, block.i2, j);
-//						else if (block.i2 - i == 1 || j-block.j1 == 1){
-//							double max_ = DBL_MIN;
-//							for(int p=i; p<block.i1; p++)
-//								for(int q=block.j1; q<j; q++){
-//									const double score_ = softMatrix[p][q]; 
-//									if (max_ < score_)
-//										max_=score_;
-//							}
-//							score += log(max_); 
-//						} 
+							stack.emplace_back(i, block.j1, block.i2, j);  
 					}
 					else{
 						if (i-block.i1 >= 2 && j-block.j1 >= 2) 
-							stack.emplace_back(block.i1, block.j1, i, j);
-//						else if (i-block.i1 == 1 || j-block.j1 == 1){
-//							double max_ = DBL_MIN;
-//							for(int p=block.i1; p<i; p++)
-//								for(int q=block.j1; q<j; q++){
-//									const double score_ = softMatrix[p][q]; 
-//									if (max_ < score_)
-//										max_=score_;
-//							}
-//							score += log(max_); 
-//						} 
+							stack.emplace_back(block.i1, block.j1, i, j);  
 						if (block.i2- i >= 2 && block.j2-j >= 2) 
-							stack.emplace_back(i, j, block.i2, block.j2);
-//						else if (block.i2- i == 1 || block.j2-j == 1){
-//							double max_ = DBL_MIN;
-//							for(int p=i; p<block.i2; p++)
-//								for(int q=j; q<block.j2; q++){
-//									const double score_ = softMatrix[p][q]; 
-//									if (max_ < score_)
-//										max_=score_;
-//							}
-//							score += log(max_); 
-//						} 
+							stack.emplace_back(i, j, block.i2, block.j2); 
 					}
 					if (stack.empty())
 						terminal = true;
@@ -150,38 +106,36 @@ private:
 		typedef priority_queue<ParserAction> BestParserActions; 
 		
 		TranslationTable ttable; 
+ 
+		void BuildSoftAlignmentMatrix(const SentencePair &sentencePair, const unsigned& m, const unsigned& n, Matrix *softMatrix);
 		
-		
-		inline void AddTranslationOptionsInBatch(vector<vector<pair<unsigned, double>>>& insert_buffer);
-		
-		void Parse(const Matrix &accumMatrix, const int ls, const int lt, 
+		void Parse(const Matrix &accumMatrix, const unsigned& m, const unsigned& n, 
 								vector<ParserAction> *bestActions);
 								
-		void SearchBestPartition(const Matrix &accumMatrix, const int i1,  const int j1, 
-												const int i2,  const int j2, BestParserActions *bestParserActions);
-		void ActionToAlignment(const vector<ParserAction> &bestActions, const int ls, const int lt,  Alignment *links);									
+		void SearchBestPartition(const Matrix &accumMatrix, BestParserActions *bestParserActions,
+							const unsigned& i1, const unsigned& j1, const unsigned& i2, const unsigned& j2);
+		void ActionToAlignment(const vector<ParserAction> &bestActions, const unsigned& m, const unsigned& n, Alignment *links);									
 		void BuildAccumMatrix(const Matrix &softMatrix, Matrix *accumMatrix);
-		void Partitionize(const Matrix &accumMatrix, const int i1, const int j1, const int i2, const int j2, Alignment *links);
-		void BuildSoftAlignmentMatrix(const SentencePair &sentencePair, Matrix *softMatrix);
-		static void FmeasureXY(const Matrix &accumMatrix, const int i1, const int j1, const int i2, const int j2, const int i3, const int j3,
-							double *score, double *score_);
-		static void Ncut(const Matrix &accumMatrix, const int i1, const int j1, const int i2, const int j2, const int i3, const int j3,
+		void Partitionize(const Matrix &accumMatrix, const unsigned i1, const unsigned j1, const unsigned i2, const unsigned j2, Alignment *links);
+		
+		static void FmeasureXY(const Matrix &accumMatrix, const unsigned& i1, const unsigned& j1, const unsigned& i2, const unsigned& j2, 
+							const unsigned& i3, const unsigned& j3, double *score, double *score_);
+		static void Ncut(const Matrix &accumMatrix, const unsigned& i1, const unsigned& j1, 
+					const unsigned& i2, const unsigned& j2, const unsigned& i3, const unsigned& j3,
 							double *score, double *score_);  
 		
 		double thread_buffer_size=10000;
 	public:
 		Hieralign(const string& beamsize); 
 		~Hieralign(); 
-		
+		void PrintAlignmentList(const AlignmentList &linksList); 
 		double sigma_theta;
 		double sigma_delta; 
 		double sigma_threshold;
-		void setHyperParameters(const double theta = 1, const double delta = 0, const double threshold = 0.0001); 
-		void Align(ParallelCorpus &parallelCorpus); 
-		void LoadTranslationTable(ifstream *file, const SimpleWordWrapper &sw2id, const SimpleWordWrapper &tw2id);
-		void LoadTranslationTable(const TranslationTable &other);
-		void LoadTranslationTableWithBatches(ifstream *file, const SimpleWordWrapper &sw2id, const SimpleWordWrapper &tw2id);
-		void PrintAlignmentList(const AlignmentList &linksList);
+		void setHyperParameters(const double& theta = 3, const double& delta = 5, const double& p0 = 1e-6); 
+		void Align(ParallelCorpus &parallelCorpus);  
+		void LoadTranslationTable(const TranslationTable &other); 
+		void unsignedAlignmentList(const AlignmentList &linksList);
 };
 
 #endif // CUTNALIGNER_H

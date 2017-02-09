@@ -20,24 +20,19 @@
   
 class IBM1 {
 	protected:   
-		int    iterations_;
-		bool   forward_;   
-		bool   tt_initialized   = false;  
-		double threshold_       = 1e-9;  
+		unsigned    iterations_;
+		bool        forward_;    
+		bool        with_null_;
+		 
 		size_t thread_buffer_size_ = 5000; 
-		size_t num_target_vocab_ = 0;
-		size_t num_source_vocab_ = 0;
 		
-		
-		
-		void TrainWithBatches(ParallelCorpus &parallelCorpus);
-		
-		void InitializeTranslationTableEntries(ParallelCorpus &parallelCorpus);
 		
 		void BatchInitializeTranslationTableEntries(ParallelCorpus &parallelCorpus); 
 		inline void AddTranslationOptionsInBatch(vector<vector<unsigned>>& insert_buffer);
 		
-		void UpdateParamsUsingBatch(const vector<SentencePair>& buffer, const int lid);
+		
+		void TrainWithBatches(ParallelCorpus &parallelCorpus); 
+		void UpdateParamsUsingBatch(const vector<SentencePair>& buffer);
 		
 		
 	public:   
@@ -46,16 +41,13 @@ class IBM1 {
 		
 		TranslationTable ttable;  
 		AlignmentList linksList;  
-		
-		void Config(const size_t& thread_buffer_size, const size_t& num_source_vocab, const size_t& num_target_vocab); 
-		
-		void TrainModel(ParallelCorpus &parallelCorpus, const bool forward=true, const int iteration=5); 
+		void Config(const bool& forward, const unsigned& iterations, const bool& withNull, const size_t& size_source_vocab);
+		void TrainModel(ParallelCorpus &parallelCorpus); 
 		
 		void ViterbiAlign(ParallelCorpus &corpus); 
 		inline void ViterbiAlignSentencePair(const Sentence &source, const Sentence &target, Alignment *links);
 		
 		void EstimateViterbiProb(ParallelCorpus &corpus, const AlignmentList& link_list, const bool& symmetrized=false); 
-		void clear();
 };
 #endif // IBM1_H
   
