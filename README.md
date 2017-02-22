@@ -36,8 +36,10 @@ Input to `Hieralign` must be tokenized and aligned into parallel sentences. Each
 Building `Hieralign` requires a modern C++ compiler and the [CMake]() build system. Additionally, the OpenMP library is required here to obtain better performance. 
 
 To compile, do the following 
+
     cmake . 
     make
+    
 ## Usage
 Run `Hieralign` to see a list of command line options.
 There are 3 ways to use `Hieralign`: 
