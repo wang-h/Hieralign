@@ -9,7 +9,7 @@ multi-threading in all stages, which makes it run faster than fast_align.
 The source code in this repository is provided under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 
 ## Characters:
-1. Prue C++ implementation, 
+1. Pure C++ implementation, 
    included the new features of C++11,  no additional library required.
 
 2. multi-threading,
