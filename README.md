@@ -1,7 +1,6 @@
 Hieralign- Word Alignment using Hierarchial Sub-sentential Alignment method with various IBM1 models
 ==========
-Copyright @Hao Wang
-email: oko_ips@ruri.waseda.jp
+
 
 `Hieralign` is yet another word alignment tool simple, fast and unsupervised, it has been implemented with 
 multi-threading in all stages, which makes it run faster than fast_align. 
@@ -64,3 +63,5 @@ Given the trained model, `Hieralign` can be ran as an online aligner:
 `Hieralign` produces outputs in the widely-used `i-j` “Pharaoh format,” where a pair `i-j` indicates that the <i>i</i>th word (zero-indexed) of the left language (source) is aligned to the <i>j</i>th word of the right sentence (target). For example, a good alignment for first sentence would be:
 
     0-0 1-1 2-2 2-3 3-4 4-5
+Copyright @Hao Wang
+email: oko_ips@ruri.waseda.jp
