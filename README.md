@@ -64,4 +64,4 @@ Given the trained model, `Hieralign` can be ran as an online aligner:
 
     0-0 1-1 2-2 2-3 3-4 4-5
 Copyright @Hao Wang
-email: oko_ips@ruri.waseda.jp
+email: oko_ips at ruri.waseda.jp
