@@ -40,7 +40,7 @@ To compile, do the following
     make
     
 ## Usage
-Run `Hieralign` to see a list of command line options.
+Run `Hieralign -h` to see a list of command line options.
 There are 3 ways to use `Hieralign`: 
 
 1. as a normal word aligner:
