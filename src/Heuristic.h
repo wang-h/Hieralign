@@ -63,7 +63,7 @@ inline void AddFinalAndNeighbors(const unsigned& m, const unsigned& n, Matrix *m
 				if ((*matrix)(i, j)==1){
 					sure->push_back(make_pair(j, i));
 					F_aligned->insert(i);
-					F_aligned->insert(j); 
+					E_aligned->insert(j); 
 				}
 			}
 		}
