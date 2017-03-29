@@ -20,11 +20,6 @@ project(Hieralign)
 set(PROJECT_PATH "${CMAKE_SOURCE_DIR}/Hieralign")
 
 
-
-#{{{{ User Code 1
-# Place your code here
-#}}}}
-
 include_directories(
     .
     .
@@ -72,18 +67,7 @@ if(WIN32)
         "<CMAKE_RC_COMPILER> ${RC_OPTIONS} -O coff -i <SOURCE> -o <OBJECT>")
 endif(WIN32)
 
-
-
-#{{{{ User Code 2
-# Place your code here
-#}}}}
-
 add_executable(Hieralign ${RC_SRCS} ${CXX_SRCS} ${C_SRCS})
 target_link_libraries(Hieralign ${LINK_OPTIONS})
 
-
-
-#{{{{ User Code 3
-# Place your code here
-#}}}}
 
