@@ -28,6 +28,7 @@ Input to `Hieralign` must be tokenized and aligned into parallel sentences. Each
 
  
    I think X is just a matter of time.	X は 時間 の 問題 と 思い ます	
+   
    I think that X will become an issue in the future.	X は 今後 の 課題 と 思い ます
 
 ## Compiling and Installation
