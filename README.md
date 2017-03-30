@@ -27,9 +27,8 @@ The source code in this repository is provided under the terms of the [Apache Li
 Input to `Hieralign` must be tokenized and aligned into parallel sentences. Each line is a source language sentence and its target language translation, separated by a triple pipe symbol with leading and trailing white space (`\t`). An example 2-sentence English-Japanese parallel corpus is:
 
  
-      I think X is just a matter of time.\tX は 時間 の 問題 と 思い ます	
-   
-      I think that X will become an issue in the future.\tX は 今後 の 課題 と 思い ます
+      I have a book . 私 は 本 を 持って いた 。 。
+      I do not know the answer	私 は その 答え を 知ら ない
 
 ## Compiling and Installation
 
@@ -63,6 +62,7 @@ Given the trained model, `Hieralign` can be ran as an online aligner:
 
 `Hieralign` produces outputs in the widely-used `i-j` “Pharaoh format,” where a pair `i-j` indicates that the <i>i</i>th word (zero-indexed) of the left language (source) is aligned to the <i>j</i>th word of the right sentence (target). For example, a good alignment for first sentence would be:
 
-    0-0 1-1 2-2 2-3 3-4 4-5
+      0-0 0-1 1-4 1-5 3-2 4-6
+      0-0 1-6 2-6 3-5 4-2 5-3
 Copyright @Hao Wang
 email: oko_ips at ruri.waseda.jp
