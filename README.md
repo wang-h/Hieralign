@@ -2,8 +2,8 @@ Hieralign- Word Alignment using Hierarchial Sub-sentential Alignment method with
 ==========
 
 
-`Hieralign` is yet another word alignment tool simple, fast and unsupervised, it has been implemented with 
-multi-threading in all stages, which makes it run faster than fast_align. 
+`Hieralign` is yet another symmetric word alignment tool simple, fast and unsupervised, 
+it has been implemented with multi-threading in all stages, which makes it run a little faster than fast_align. 
 
 The source code in this repository is provided under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 
@@ -27,9 +27,9 @@ The source code in this repository is provided under the terms of the [Apache Li
 Input to `Hieralign` must be tokenized and aligned into parallel sentences. Each line is a source language sentence and its target language translation, separated by a triple pipe symbol with leading and trailing white space (`\t`). An example 2-sentence English-Japanese parallel corpus is:
 
  
-   I think X is just a matter of time.	X は 時間 の 問題 と 思い ます	
+      I think X is just a matter of time.\tX は 時間 の 問題 と 思い ます	
    
-   I think that X will become an issue in the future.	X は 今後 の 課題 と 思い ます
+      I think that X will become an issue in the future.\tX は 今後 の 課題 と 思い ます
 
 ## Compiling and Installation
 
