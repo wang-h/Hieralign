@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/Hieralign.dir/src/main.cc.o CMakeFiles/Hieralign.dir/src/IBM1.cc.o CMakeFiles/Hieralign.dir/src/Hieralign.cc.o CMakeFiles/Hieralign.dir/src/VBIBM1.cc.o  -o Hieralign -rdynamic -fopenmp 

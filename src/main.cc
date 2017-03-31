@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 			}else if (strcmp(argv[i], "--delta"     ) == 0 && i + 1 < argc) {
 				delta = argv[++i];  
 			}else if (strcmp(argv[i], "--prior"     ) == 0 && i + 1 < argc) {
-				prior = stod(argv[++i]);  
+				prior = argv[++i];  
 			}else if (strcmp(argv[i], "--threshold" ) == 0 && i + 1 < argc) {
 				threshold = argv[++i];
 			}else if (strcmp(argv[i], "--p0"        ) == 0 && i + 1 < argc) {
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 			
 			
 			cerr << "# training IBM1 Viterbi in backward direction ..." <<endl; 
-			ibm1_vb_backward.Config(false, 5, true, sw2id.size()); 
+			ibm1_vb_backward.Config(false, 5, true, tw2id.size()); 
 			ibm1_vb_backward.TrainModel(trainCorpus); 
 			ibm1_vb_backward.ViterbiAlign(trainCorpus);
 			ibm1_vb_backward.EstimateViterbiProb(trainCorpus, ibm1_vb_backward.linksList);  
@@ -191,7 +191,7 @@ int main(int argc, char **argv)
 			vbibm1_vb_forward.ViterbiAlign(trainCorpus);
 			vbibm1_vb_forward.EstimateViterbiProb(trainCorpus, vbibm1_vb_forward.linksList);  
 			
-			vbibm1_vb_backward.Config(false, 5, true, sw2id.size()); 
+			vbibm1_vb_backward.Config(false, 5, true, tw2id.size()); 
 			cerr << "# training VBIBM1 Viterbi in backward direction ..." <<endl; 
 			vbibm1_vb_backward.TrainModel(trainCorpus, stod(prior)); 
 			vbibm1_vb_backward.ViterbiAlign(trainCorpus);
@@ -210,7 +210,7 @@ int main(int argc, char **argv)
 			ibm1_vbh_forward.TrainModel(trainCorpus); 
 			ibm1_vbh_forward.ViterbiAlign(trainCorpus);  
 			
-			ibm1_vbh_backward.Config(false, 5, true, sw2id.size());
+			ibm1_vbh_backward.Config(false, 5, true, tw2id.size());
 			cerr << "# training IBM1 Viterbi+heuristic in backward direction ..." <<endl; 
 			ibm1_vbh_backward.TrainModel(trainCorpus); 
 			ibm1_vbh_backward.ViterbiAlign(trainCorpus);   
@@ -233,7 +233,7 @@ int main(int argc, char **argv)
 			vbibm1_vbh_forward.TrainModel( trainCorpus, stod(prior)); 
 			vbibm1_vbh_forward.ViterbiAlign(trainCorpus);  
 			
-			vbibm1_vbh_backward.Config(false, 5, true, sw2id.size());
+			vbibm1_vbh_backward.Config(false, 5, true, tw2id.size());
 			cerr << "# training VBIBM1 Viterbi+heuristic in backward direction ..." <<endl; 
 			vbibm1_vbh_backward.TrainModel(trainCorpus, stod(prior)); 
 			vbibm1_vbh_backward.ViterbiAlign(trainCorpus);  
