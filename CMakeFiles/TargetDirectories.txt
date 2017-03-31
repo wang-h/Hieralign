@@ -1,3 +1,0 @@
-/home/alveinwang/Documents/Hieralign/CMakeFiles/rebuild_cache.dir
-/home/alveinwang/Documents/Hieralign/CMakeFiles/edit_cache.dir
-/home/alveinwang/Documents/Hieralign/CMakeFiles/Hieralign.dir

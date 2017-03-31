@@ -1,5 +1,4 @@
-# -*- CMakeLists.txt. Do not edit by hand -*-
-# 　Copyright 2013 by Hao Wang  
+# -*- CMakeLists.txt. Do not edit. -*-
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
 #  You may obtain a copy of the License at
@@ -18,13 +17,8 @@ project(Hieralign)
 
 # Define some variables
 set(PROJECT_PATH "${CMAKE_SOURCE_DIR}/Hieralign")
-
-
-
-#{{{{ User Code 1
-# Place your code here
-#}}}}
-
+ 
+ 
 include_directories(
     .
     .
@@ -72,18 +66,8 @@ if(WIN32)
         "<CMAKE_RC_COMPILER> ${RC_OPTIONS} -O coff -i <SOURCE> -o <OBJECT>")
 endif(WIN32)
 
-
-
-#{{{{ User Code 2
-# Place your code here
-#}}}}
-
+ 
 add_executable(Hieralign ${RC_SRCS} ${CXX_SRCS} ${C_SRCS})
 target_link_libraries(Hieralign ${LINK_OPTIONS})
 
-
-
-#{{{{ User Code 3
-# Place your code here
-#}}}}
 
