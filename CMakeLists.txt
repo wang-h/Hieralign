@@ -17,17 +17,9 @@ project(Hieralign)
 
 # Define some variables
 set(PROJECT_PATH "${CMAKE_SOURCE_DIR}/Hieralign")
-<<<<<<< HEAD
- 
- 
-=======
-
-
->>>>>>> 696df8a42e20db9cf0fd617211ef71d9aace1264
 include_directories(
     .
     .
-
 )
 
 
@@ -71,10 +63,6 @@ if(WIN32)
         "<CMAKE_RC_COMPILER> ${RC_OPTIONS} -O coff -i <SOURCE> -o <OBJECT>")
 endif(WIN32)
 
-<<<<<<< HEAD
- 
-=======
->>>>>>> 696df8a42e20db9cf0fd617211ef71d9aace1264
 add_executable(Hieralign ${RC_SRCS} ${CXX_SRCS} ${C_SRCS})
 target_link_libraries(Hieralign ${LINK_OPTIONS})
 
