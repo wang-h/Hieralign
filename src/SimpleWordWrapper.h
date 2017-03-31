@@ -1,5 +1,5 @@
-#ifndef SIMPLEWORDWRAPPER_H
-#define SIMPLEWORDWRAPPER_H
+#ifndef SIMPLE_WORDWRAPPER_H
+#define SIMPLE_WORDWRAPPER_H
 #include "Utils.h"
 class SimpleWordWrapper
 {
@@ -49,4 +49,4 @@ class SimpleWordWrapper
     HASH_MAP_TYPE dict;
     HASH_MAP_TYPE dict_;
 };
-#endif // SIMPLEWORDWRAPPER_H
+#endif // SIMPLE_WORDWRAPPER_H

@@ -1,5 +1,5 @@
-#ifndef HIERAGLIGN_UTILS_H
-#define HIERAGLIGN_UTILS_H
+#ifndef HIERALIGN_UTILS_H
+#define HIERALIGN_UTILS_H
 #include <omp.h>
 #include <vector>
 #include <string>
@@ -45,4 +45,4 @@ inline vector<string> Split(const string &str, const string &delim)
 
 typedef unordered_map<unsigned, double> W2Double;
 typedef vector<W2Double> W2WDouble;
-#endif // HIERAGLIGN_UTILS_H
+#endif // HIERALIGN_UTILS_H

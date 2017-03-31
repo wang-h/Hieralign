@@ -4,10 +4,10 @@
 class Matrix
 {
   public:
-    typedef typename std::vector<double>::reference reference;
-    typedef typename std::vector<double>::const_reference const_reference;
-    typedef typename std::vector<double>::iterator iterator;
-    typedef typename std::vector<double>::const_iterator const_iterator;
+    typedef typename vector<double>::reference reference;
+    typedef typename vector<double>::const_reference const_reference;
+    typedef typename vector<double>::iterator iterator;
+    typedef typename vector<double>::const_iterator const_iterator;
     Matrix() : width_(0), height_(0){};
 
     Matrix(unsigned w, unsigned h) : width_(w), height_(h), data_(w * h) {}
@@ -76,7 +76,7 @@ class Matrix
     unsigned width_;
     unsigned height_;
 
-    std::vector<double> data_;
+    vector<double> data_;
 };
 
 #endif // MATRIX_H

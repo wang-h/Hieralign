@@ -34,8 +34,7 @@ class ParallelCorpus
             targetSentences.push_back(EncodeSentenceWithWrapper(sentence_pair[1], tw2id));
         }
         CHECK(source_size() == target_size(), "#ERROR! sentences are not equal.");
-        size_ = source_size();
-        //cerr << "training corpus size:"  << " [" << size_ << "]" << endl;
+        size_ = source_size(); 
     };
     void ReadCorpus(ifstream *file, SimpleWordWrapper *sw2id, SimpleWordWrapper *tw2id, bool isSource = true)
     {
@@ -48,8 +47,8 @@ class ParallelCorpus
         if (!isSource)
         {
             CHECK(source_size() == target_size(), "#ERROR! sentences are not equal.");
-            size_ = source_size();
-            //cerr << "training corpus size:"  << " [" << size_ << "]" << "source vocab size:" << " [" << source_vocab_size() << "]" << "target vocab size:"  << " [" << target_vocab_size() << "]" << endl;
+            size_ = source_size(); 
+            
         }
     }
     size_t size() const

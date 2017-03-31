@@ -111,7 +111,6 @@ void Heuristic(const unsigned &m, const unsigned &n, set<unsigned> *F_aligned, s
     AddFinalAndNeighbors(m, n, matrix, F_aligned, E_aligned, sure);
 }
 
-<<<<<<< HEAD
 void SymmetrizeAlignment(const AlignmentList &forward_list, const AlignmentList &backward_list,
                          AlignmentList *symmetric_list)
 {
@@ -120,43 +119,6 @@ void SymmetrizeAlignment(const AlignmentList &forward_list, const AlignmentList 
 #pragma omp parallel for schedule(dynamic)
     for (size_t i = 0; i < symmetric_list->size(); i++)
     {
-=======
-inline void AddFinalAndNeighbors(const unsigned& m, const unsigned& n, Matrix *matrix, 
-				set<unsigned> *F_aligned, set<unsigned> *E_aligned, Alignment *sure){
-	for(unsigned i=0; i<m; i++){
-		for(unsigned j=0; j<n; j++){
-			if (F_aligned->find(i)== F_aligned->end() 
-					&& E_aligned->find(j)== E_aligned->end()){ 
-				if ((*matrix)(i, j)==1){
-					sure->push_back(make_pair(j, i));
-					F_aligned->insert(i);
-					E_aligned->insert(j); 
-				}
-			}
-		}
-	}
-}  
-void Heuristic(const unsigned& m, const unsigned& n, set<unsigned> *F_aligned, set<unsigned> *E_aligned, 
-				Alignment *sure, Matrix *matrix){
-	bool added = false;
-	while (true){ 
-		added = false;
-		for(unsigned i=0; i<m; i++){
-			for(unsigned j=0; j<n; j++){
-				if ((*matrix)(i, j)==2){
-					if (AddVerticalNeighbors(i, j, m, matrix, F_aligned, sure)||\
-							AddHorizontalNeighbors(i, j, n, matrix, F_aligned, sure)||\
-								AddDiagonalNeighbors(i, j, m, n, matrix, F_aligned, E_aligned, sure))
-						added = true; 
-				}
-			}
-		}
-		if (!added)
-			break;
-	}
-	AddFinalAndNeighbors(m, n, matrix, F_aligned, E_aligned, sure);
-} 
->>>>>>> 696df8a42e20db9cf0fd617211ef71d9aace1264
 
         const Alignment &forward_links = forward_list[i];
         const Alignment &backward_links = backward_list[i];
