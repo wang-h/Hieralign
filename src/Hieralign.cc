@@ -132,12 +132,19 @@ void Hieralign::PrintAlignmentList(const AlignmentList &linksList)
     for (size_t k = 0; k < linksList.size(); k++)
     {
         const Alignment &links = linksList[k];
-        for (size_t i = 0; i < links.size(); i++)
+        if (links.empty())
         {
-            if (i == links.size() - 1)
-                cout << links[i].first << "-" << links[i].second << endl;
-            else
-                cout << links[i].first << "-" << links[i].second << " ";
+            cout << endl;
+        }
+        else
+        {
+            for (size_t i = 0; i < links.size(); i++)
+            {
+                if (i == links.size() - 1)
+                    cout << links[i].first << "-" << links[i].second << endl;
+                else
+                    cout << links[i].first << "-" << links[i].second << " ";
+            }
         }
     }
 }
