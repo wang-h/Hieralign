@@ -4,5 +4,4 @@
 typedef vector<pair<unsigned, unsigned>> Alignment;
 typedef vector<Alignment> AlignmentList;
 typedef set<Alignment> AlignmentSet;
-
 #endif // ALIGNMENT_H
