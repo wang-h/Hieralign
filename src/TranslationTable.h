@@ -1,5 +1,5 @@
 // Modified from the original file of Chris Dyer
-// Copyright 2013 by Hao Wang, modified from the original code of Chris Dyer
+// Copyright 2017 by Hao Wang, modified from the original code of Chris Dyer
 // provided in https://github.com/clab/fast_align/blob/master/src/ttables.h
 
 // Licensed under the Apache License, Version 2.0 (the "License");
