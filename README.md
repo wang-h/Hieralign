@@ -2,7 +2,7 @@ Hieralign- Symmetric Word Alignment using Hierarchial Sub-sentential Alignment M
 ==========
 
 `Hieralign` is yet another symmetric word alignment tool simple, fast and unsupervised, 
-it has been implemented with multi-threading in all stages, which makes it run a little faster than fast_align. 
+it has been implemented with multi-threading in all stages, which makes it run as fast as fast_align. 
 
 The source code in this repository is provided under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 
@@ -17,7 +17,7 @@ The source code in this repository is provided under the terms of the [Apache Li
 
 4. replaced the best-1 version of hierarchical subsentential alignment with beam search version.
 
-5. a little faster than fast_align, less than 2 minutes for 300,000 lines.
+5. fast, less than 2 minutes for 300,000 lines.
 
 6. well-formed codes and simple class structure.
 
