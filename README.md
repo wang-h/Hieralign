@@ -6,6 +6,9 @@ it has been implemented with multi-threading in all stages, which makes it run a
 
 The source code in this repository is provided under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 
+
+Hao Wang and Yves Lepage. Hierarchical Sub-sentential Alignment with IBM Models for Statistical Phrase-based Machine Translation. Jounral of Natural Language Processing. Vol.24 No.4 2017.9.
+
 ## Characters:
 1. Pure C++ implementation, 
    included the new features of C++11,  no additional library required.
