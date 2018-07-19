@@ -7,8 +7,7 @@ it has been implemented with multi-threading in all stages, which makes it run a
 The source code in this repository is provided under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 
 ## Cite paper
-   Hao Wang and Yves Lepage. Hierarchical Sub-sentential Alignment with IBM Models for Statistical Phrase-based Machine Translation. 
-   https://www.jstage.jst.go.jp/article/jnlp/24/4/24_619/_pdf/-char/ja
+   Hao Wang and Yves Lepage. [Hierarchical Sub-sentential Alignment with IBM Models for Statistical Phrase-based Machine Translation.](https://www.jstage.jst.go.jp/article/jnlp/24/4/24_619/_pdf/-char/ja)
    Jounral of Natural Language Processing. Vol.24 No.4 2017.9.
 
 ## Characters:
